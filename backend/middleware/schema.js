@@ -2,9 +2,9 @@ import { z } from 'zod';
 
 const priorityEnum = z.enum(['low', 'medium', 'high']);
 
-// ISO date string or null/empty
+
 const dueDateSchema = z
-  .union([z.string().datetime({ offset: true }), z.string().length(0), z.null()])
+  .union([z.iso.datetime(), z.string().length(0), z.null()])
   .optional();
 
 export const taskCreateSchema = z.object({
@@ -26,6 +26,8 @@ export const taskUpdateSchema = z
     message: 'At least one field must be provided',
   });
 
-export const reorderSchema = z.object({
-  ids: z.array(z.number().int().positive()).min(1, '"ids" must be a non-empty array'),
+export const listQuerySchema = z.object({
+  filter: z.enum(['all', 'pending', 'completed']).optional().default('all'),
+  search: z.string().trim().max(200).optional().default(''),
+  sort: z.enum(['date', 'priority', 'title']).optional().default('date'),
 });
