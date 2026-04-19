@@ -1,5 +1,3 @@
-import { toast } from 'sonner';
-
 function formatDate(iso) {
   if (!iso) return '';
   const d = new Date(iso);
@@ -27,21 +25,6 @@ function getDueInfo(iso, completed) {
 }
 
 export default function TaskItem({ task, onToggle, onEdit, onDelete }) {
-  const handleDelete = () => {
-    toast(`Delete "${task.title}"?`, {
-      description: 'This action cannot be undone.',
-      duration: 8000,
-      action: {
-        label: 'Delete',
-        onClick: () => onDelete(task.id),
-      },
-      cancel: {
-        label: 'Cancel',
-        onClick: () => {},
-      },
-    });
-  };
-
   const dueInfo = getDueInfo(task.dueDate, task.completed);
 
   return (
@@ -76,7 +59,7 @@ export default function TaskItem({ task, onToggle, onEdit, onDelete }) {
           <button type="button" className="btn btn--ghost" onClick={() => onEdit(task)}>
             Edit
           </button>
-          <button type="button" className="btn btn--danger" onClick={handleDelete}>
+          <button type="button" className="btn btn--danger" onClick={() => onDelete(task.id)}>
             Delete
           </button>
         </div>
